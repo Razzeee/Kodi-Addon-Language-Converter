@@ -1,5 +1,6 @@
 import os
 import sys
+import xml.etree.ElementTree as etree
 
 LANGUAGE_LIST = [{'iso_code': 'af', 'locale': 'af_ZA', 'name': 'Afrikaans'}
                  , {'iso_code': 'AM', 'locale': 'am_ET', 'name': 'Amharic'}
@@ -104,7 +105,13 @@ else:
             file.write(filedata)
 
     # Language folder conversion
-    LANGUAGE_FOLDER = os.path.join(TARGET_FOLDER, "resources", "language")
+    data = etree.parse(fileToSearch).getroot()
+    addonid = data.get('id')
+
+    if addonid.startswith('skin.'):
+        LANGUAGE_FOLDER = os.path.join(TARGET_FOLDER, "language")
+    else:
+        LANGUAGE_FOLDER = os.path.join(TARGET_FOLDER, "resources", "language")
     SUBFOLDERS = next(os.walk(LANGUAGE_FOLDER))[1]
 
     for folder in SUBFOLDERS:
