@@ -128,7 +128,7 @@ else:
         with open(fileToSearch, 'w', encoding="utf8") as file:
             file.write(filedata)
 
-    # Language folder conversion
+    # Find language folders
     data = etree.parse(fileToSearch).getroot()
     addonid = data.get('id')
 
@@ -138,6 +138,54 @@ else:
         LANGUAGE_FOLDER = os.path.join(TARGET_FOLDER, "resources", "language")
     SUBFOLDERS = next(os.walk(LANGUAGE_FOLDER))[1]
 
+    # Language file conversion
+    engFile = os.path.join(LANGUAGE_FOLDER, "English", "strings.xml")
+    if os.path.exists(engFile):
+        root = etree.parse(engFile).getroot()
+        strings = root.findall('string')
+        engDict = {}
+        for string in strings:
+          sid = string.get("id")
+          text = string.text
+          engDict[sid] = text
+
+        # Update english language file
+        newText = 'msgid ""\nmsgstr ""\n\n'
+        for k,v in engDict.items():
+           newText = newText + 'msgctxt "' + k + '"\n' + 'msgid "' + v + '"\nmsgstr ""\n\n'
+
+        newFile = os.path.join(LANGUAGE_FOLDER, "English", "strings.po")
+        with open(newFile, 'w', encoding="utf8") as file:
+            file.write(newText)
+
+        os.remove(engFile)
+
+        # Update other language files
+        for folder in SUBFOLDERS:
+            if folder != 'English':
+                langFile = os.path.join(LANGUAGE_FOLDER, folder, "strings.xml")
+                root = etree.parse(langFile).getroot()
+                strings = root.findall('string')
+                strDict = {}
+
+                for string in strings:
+                    sid = string.get("id")
+                    text = string.text
+                    strDict[sid] = text
+
+                # Update the language file
+                newText = 'msgid ""\nmsgstr ""\n\n'
+                for k,v in strDict.items():
+                    if k in engDict:
+                        newText = newText + 'msgctxt "' + k + '"\n' + 'msgid "' + engDict[k] + '"\nmsgstr "' + v + '"\n\n'
+
+                newFile = os.path.join(LANGUAGE_FOLDER, folder, "strings.po")
+                with open(newFile, 'w', encoding="utf8") as file:
+                    file.write(newText)
+
+                os.remove(langFile)
+
+    # Language folder conversion
     for folder in SUBFOLDERS:
         try:
             match = next(
