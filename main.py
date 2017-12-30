@@ -111,7 +111,9 @@ else:
 
     # Find language folders
     data = etree.parse(fileToSearch).getroot()
+    name = data.get('name')
     addonid = data.get('id')
+    author = data.get('provider-name')
 
     if addonid.startswith('skin.'):
         LANGUAGE_FOLDER = os.path.join(TARGET_FOLDER, "language")
@@ -124,6 +126,20 @@ else:
         exit(0)
 
     # Language file conversion
+    comment = '# Kodi Media Center language file\n# Addon Name: %s\n# Addon id: %s\n# Addon Provider: %s\n' % (name, addonid, author)
+    header = 'msgid ""\nmsgstr ""\n'
+    header += '"Project-Id-Version: Kodi Addons\\n"\n'
+    header += '"Report-Msgid-Bugs-To: https://forum.kodi.tv/\\n"\n'
+    header += '"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\\n"\n'
+    header += '"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"\n'
+    header += '"Last-Translator: Kodi Translation Team\\n"\n'
+    header += '"Language-Team: Team-Kodi\\n"\n'
+    header += '"MIME-Version: 1.0\\n"\n'
+    header += '"Content-Type: text/plain; charset=UTF-8\\n"\n'
+    header += '"Content-Transfer-Encoding: 8bit\\n"\n'
+    header += '"Language: %s\\n"\n'
+    header += '"Plural-Forms: nplurals=2; plural=(n > 1);\\n"\n\n'
+
     engFile = os.path.join(LANGUAGE_FOLDER, "English", "strings.xml")
     if os.path.exists(engFile):
         root = etree.parse(engFile).getroot()
@@ -135,7 +151,9 @@ else:
           engDict[sid] = text
 
         # Update english language file
-        newText = 'msgid ""\nmsgstr ""\n\n'
+
+        newText = comment + header % 'en_GB'
+
         for k,v in engDict.items():
            newText = newText + 'msgctxt "' + k + '"\n' + 'msgid "' + v + '"\nmsgstr ""\n\n'
 
@@ -159,7 +177,14 @@ else:
                     strDict[sid] = text
 
                 # Update the language file
-                newText = 'msgid ""\nmsgstr ""\n\n'
+                try:
+                    match = next(
+                        language for language in LANGUAGE_LIST if language["name"] == folder)
+                    locale = match['locale']
+                except:
+                    print("Can't find match for '%s', this language is not supported by Kodi" % folder)
+                    continue
+                newText = comment + header % locale
                 for k,v in strDict.items():
                     if k in engDict:
                         newText = newText + 'msgctxt "' + k + '"\n' + 'msgid "' + engDict[k] + '"\nmsgstr "' + v + '"\n\n'
