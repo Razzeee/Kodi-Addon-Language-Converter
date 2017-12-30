@@ -5,9 +5,8 @@ import sys
 import xml.etree.ElementTree as etree
 
 LANGUAGE_LIST = [{'iso_code': 'af', 'locale': 'af_ZA', 'name': 'Afrikaans'}
-                 , {'iso_code': 'AM', 'locale': 'am_ET', 'name': 'Amharic'}
+                 , {'iso_code': 'am', 'locale': 'am_ET', 'name': 'Amharic'}
                  , {'iso_code': 'ar', 'locale': 'ar_SA', 'name': 'Arabic'}
-                 , {'iso_code': 'ast', 'locale': 'ast', 'name': 'Asturian'}
                  , {'iso_code': 'az', 'locale': 'az_AZ', 'name': 'Azerbaijani'}
                  , {'iso_code': 'be', 'locale': 'be_BY', 'name': 'Belarusian'}
                  , {'iso_code': 'bg', 'locale': 'bg_BG', 'name': 'Bulgarian'}
@@ -17,13 +16,10 @@ LANGUAGE_LIST = [{'iso_code': 'af', 'locale': 'af_ZA', 'name': 'Afrikaans'}
                  , {'iso_code': 'cy', 'locale': 'cy_GB', 'name': 'Welsh'}
                  , {'iso_code': 'da', 'locale': 'da_DK', 'name': 'Danish'}
                  , {'iso_code': 'de', 'locale': 'de_DE', 'name': 'German'}
-                 , {'iso_code': 'ee', 'locale': 'ee_EE', 'name': 'Ewe'}
                  , {'iso_code': 'el', 'locale': 'el_GR', 'name': 'Greek'}
                  , {'iso_code': 'en', 'locale': 'en_GB', 'name': 'English'}
-                 , {'iso_code': 'en', 'locale': 'en_GB', 'name': 'English (Great Britain)'}
                  , {'iso_code': 'en', 'locale': 'en_AU', 'name': 'English (Australia)'}
                  , {'iso_code': 'en', 'locale': 'en_NZ', 'name': 'English (New Zealand)'}
-                 , {'iso_code': 'en', 'locale': 'en_US', 'name': 'English (United States)'}
                  , {'iso_code': 'en', 'locale': 'en_US', 'name': 'English (US)'}
                  , {'iso_code': 'es', 'locale': 'es_ES', 'name': 'Spanish'}
                  , {'iso_code': 'es', 'locale': 'es_AR', 'name': 'Spanish (Argentina)'}
@@ -32,72 +28,56 @@ LANGUAGE_LIST = [{'iso_code': 'af', 'locale': 'af_ZA', 'name': 'Afrikaans'}
                  , {'iso_code': 'eo', 'locale': 'eo', 'name': 'Esperanto'}
                  , {'iso_code': 'eu', 'locale': 'eu_ES', 'name': 'Basque'}
                  , {'iso_code': 'fa', 'locale': 'fa_AF', 'name': 'Persian'}
-                 , {'iso_code': 'fa', 'locale': 'fa_AF', 'name': 'Persian (Afghanistan)'}
                  , {'iso_code': 'fa', 'locale': 'fa_IR', 'name': 'Persian (Iran)'}
                  , {'iso_code': 'fi', 'locale': 'fi_FI', 'name': 'Finnish'}
                  , {'iso_code': 'fo', 'locale': 'fo_FO', 'name': 'Faroese'}
                  , {'iso_code': 'fr', 'locale': 'fr_FR', 'name': 'French'}
-                 , {'iso_code': 'fr', 'locale': 'fr_CA', 'name': 'French (Canadian)'}
                  , {'iso_code': 'fr', 'locale': 'fr_CA', 'name': 'French (Canada)'}
-                 , {'iso_code': 'fy', 'locale': 'fy_DE', 'name': 'Western Frisian'}
                  , {'iso_code': 'gl', 'locale': 'gl_ES', 'name': 'Galician'}
-                 , {'iso_code': 'gl', 'locale': 'gl_ES', 'name': 'Gallego'}
                  , {'iso_code': 'he', 'locale': 'he_IL', 'name': 'Hebrew'}
-                 , {'iso_code': 'hi', 'locale': 'hi_IN', 'name': 'Hindi (India)'}
                  , {'iso_code': 'hi', 'locale': 'hi_IN', 'name': 'Hindi (Devanagiri)'}
                  , {'iso_code': 'hr', 'locale': 'hr_HR', 'name': 'Croatian'}
-                 , {'iso_code': 'ht', 'locale': 'ht_HT', 'name': 'Haitian (Haitian Creole)'}
                  , {'iso_code': 'hu', 'locale': 'hu_HU', 'name': 'Hungarian'}
                  , {'iso_code': 'hy', 'locale': 'hy_AM', 'name': 'Armenian'}
                  , {'iso_code': 'id', 'locale': 'id_ID', 'name': 'Indonesian'}
                  , {'iso_code': 'is', 'locale': 'is_IS', 'name': 'Icelandic'}
                  , {'iso_code': 'it', 'locale': 'it_IT', 'name': 'Italian'}
                  , {'iso_code': 'ja', 'locale': 'ja_JP', 'name': 'Japanese'}
-                 , {'iso_code': 'ka', 'locale': 'ka_GE', 'name': 'Georgian'}
                  , {'iso_code': 'ko', 'locale': 'ko_KR', 'name': 'Korean'}
                  , {'iso_code': 'lt', 'locale': 'lt_LT', 'name': 'Lithuanian'}
                  , {'iso_code': 'lv', 'locale': 'lv_LV', 'name': 'Latvian'}
                  , {'iso_code': 'mi', 'locale': 'mi', 'name': 'Maori'}
                  , {'iso_code': 'mk', 'locale': 'mk_MK', 'name': 'Macedonian'}
                  , {'iso_code': 'ml', 'locale': 'ml_IN', 'name': 'Malayalam'}
-                 , {'iso_code': 'ml', 'locale': 'ml_IN', 'name': 'Malayalam (India)'}
                  , {'iso_code': 'mn', 'locale': 'mn_MN', 'name': 'Mongolian (Mongolia)'}
-                 , {'iso_code': 'ms', 'locale': 'ms_MY', 'name': 'Malaysian'}
                  , {'iso_code': 'ms', 'locale': 'ms_MY', 'name': 'Malay'}
                  , {'iso_code': 'mt', 'locale': 'mt_MT', 'name': 'Maltese'}
                  , {'iso_code': 'my', 'locale': 'my_MM', 'name': 'Burmese'}
-                 , {'iso_code': 'my', 'locale': 'my_MM', 'name': 'Burmese (Myanmar)'}
                  , {'iso_code': 'nl', 'locale': 'nl_NL', 'name': 'Dutch'}
                  , {'iso_code': 'no', 'locale': 'nb_NO', 'name': 'Norwegian'}
+                 , {'iso_code': 'os', 'locale': 'os_OS', 'name': 'Ossetic'}
                  , {'iso_code': 'pl', 'locale': 'pl_PL', 'name': 'Polish'}
                  , {'iso_code': 'pt', 'locale': 'pt_PT', 'name': 'Portuguese'}
-                 , {'iso_code': 'pt', 'locale': 'pt_BR', 'name': 'Portuguese (Brazillian)'}
                  , {'iso_code': 'pt', 'locale': 'pt_BR', 'name': 'Portuguese (Brazil)'}
                  , {'iso_code': 'ro', 'locale': 'ro_RO', 'name': 'Romanian'}
                  , {'iso_code': 'ru', 'locale': 'ru_RU', 'name': 'Russian'}
-                 , {'iso_code': 'se', 'locale': 'se_SE', 'name': 'Northern Sami'}
+                 , {'iso_code': 'si', 'locale': 'si_LK', 'name': 'Sinhala'}
                  , {'iso_code': 'sk', 'locale': 'sk_SK', 'name': 'Slovak'}
                  , {'iso_code': 'sl', 'locale': 'sl_SI', 'name': 'Slovenian'}
-                 , {'iso_code': 'sl', 'locale': 'sl_SI', 'name': 'Slovenian (Slovenia)'}
                  , {'iso_code': 'sq', 'locale': 'sq_AL', 'name': 'Albanian'}
-                 , {'iso_code': 'sr', 'locale': 'sr_RS', 'name': 'Serbian'}
+                 , {'iso_code': 'sr', 'locale': 'sr_RS@latin', 'name': 'Serbian'}
                  , {'iso_code': 'sr', 'locale': 'sr_RS', 'name': 'Serbian (Cyrillic)'}
-                 , {'iso_code': 'sr', 'locale': 'sr_RS@latin', 'name': 'Serbian (latin)'}
                  , {'iso_code': 'sv', 'locale': 'sv_SE', 'name': 'Swedish'}
                  , {'iso_code': 'szl', 'locale': 'szl', 'name': 'Silesian'}
                  , {'iso_code': 'ta', 'locale': 'ta_IN', 'name': 'Tamil (India)'}
-                 , {'iso_code': 'te', 'locale': 'te_IN', 'name': 'Telugu (India)'}
+                 , {'iso_code': 'te', 'locale': 'te_IN', 'name': 'Telugu'}
                  , {'iso_code': 'tg', 'locale': 'tg_tj', 'name': 'Tajik'}
                  , {'iso_code': 'th', 'locale': 'th_TH', 'name': 'Thai'}
                  , {'iso_code': 'tr', 'locale': 'tr_TR', 'name': 'Turkish'}
-                 , {'iso_code': 'tt', 'locale': 'tt', 'name': 'Tatar'}
                  , {'iso_code': 'uk', 'locale': 'uk_UA', 'name': 'Ukrainian'}
                  , {'iso_code': 'uz', 'locale': 'uz_UZ', 'name': 'Uzbek'}
                  , {'iso_code': 'vi', 'locale': 'vi_VN', 'name': 'Vietnamese'}
-                 , {'iso_code': 'vi', 'locale': 'vi_VN', 'name': 'Vietnamese (Viet Nam)'}
-                 , {'iso_code': 'zh', 'locale': 'zh_CN', 'name': 'Chinese (China)'}
                  , {'iso_code': 'zh', 'locale': 'zh_CN', 'name': 'Chinese (Simple)'}
-                 , {'iso_code': 'zh', 'locale': 'zh_TW', 'name': 'Chinese (Taiwan)'}
                  , {'iso_code': 'zh', 'locale': 'zh_TW', 'name': 'Chinese (Traditional)'}
                  ]
 
@@ -203,7 +183,7 @@ else:
                 print("'%s' already exists. Might have been converted wrongly." % new_folder_path)
 
         except StopIteration:
-            print("Can't find match for '%s'" % folder)
+            print("Can't find match for '%s', this language is not supported by Kodi" % folder)
 
     print("Done converting.")
     exit(0)
