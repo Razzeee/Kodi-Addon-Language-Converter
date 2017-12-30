@@ -92,21 +92,22 @@ if not os.path.isdir(TARGET_FOLDER):
     exit(1)
 else:
     # Addon.xml conversion
+    fileToSearch = os.path.join(TARGET_FOLDER, "addon.xml")
+
+    # Read in the file
+    with open(fileToSearch, 'r', encoding="utf8") as file:
+        filedata = file.read()
+
     for item in LANGUAGE_LIST:
-        fileToSearch = os.path.join(TARGET_FOLDER, "addon.xml")
         textToSearch = "\"%s\"" % item["iso_code"]
         textToReplace = "\"%s\"" % item["locale"]
-
-        # Read in the file
-        with open(fileToSearch, 'r', encoding="utf8") as file:
-            filedata = file.read()
 
         # Replace the target string
         filedata = filedata.replace(textToSearch, textToReplace)
 
-        # Write the file out again
-        with open(fileToSearch, 'w', encoding="utf8") as file:
-            file.write(filedata)
+    # Write the file out again
+    with open(fileToSearch, 'w', encoding="utf8") as file:
+        file.write(filedata)
 
     # Find language folders
     data = etree.parse(fileToSearch).getroot()
