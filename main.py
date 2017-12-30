@@ -136,7 +136,11 @@ else:
         LANGUAGE_FOLDER = os.path.join(TARGET_FOLDER, "language")
     else:
         LANGUAGE_FOLDER = os.path.join(TARGET_FOLDER, "resources", "language")
-    SUBFOLDERS = next(os.walk(LANGUAGE_FOLDER))[1]
+    if os.path.isdir(LANGUAGE_FOLDER):
+        SUBFOLDERS = next(os.walk(LANGUAGE_FOLDER))[1]
+    else:
+        print("Done converting.")
+        exit(0)
 
     # Language file conversion
     engFile = os.path.join(LANGUAGE_FOLDER, "English", "strings.xml")
