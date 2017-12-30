@@ -2,6 +2,7 @@
 
 import os
 import sys
+import html
 import xml.etree.ElementTree as etree
 
 LANGUAGE_LIST = [{'iso_code': 'af', 'locale': 'af_ZA', 'name': 'Afrikaans'}
@@ -147,7 +148,7 @@ else:
         engDict = {}
         for string in strings:
           sid = string.get("id")
-          text = string.text
+          text = html.unescape(string.text)
           engDict[sid] = text
 
         # Update english language file
@@ -173,7 +174,7 @@ else:
 
                 for string in strings:
                     sid = string.get("id")
-                    text = string.text
+                    text = html.unescape(string.text)
                     strDict[sid] = text
 
                 # Update the language file
